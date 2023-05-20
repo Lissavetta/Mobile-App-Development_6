@@ -1,14 +1,38 @@
 package ru.mirea.tropina.internalfilestorage;
-
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+
+import java.io.FileOutputStream;
+
+import ru.mirea.tropina.internalfilestorage.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ActivityMainBinding binding;
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private String fileName = "mirea.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        binding.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FileOutputStream outputStream;
+                try {
+                    String string = binding.editTextDate.getText().toString();
+                    outputStream = openFileOutput(fileName, Context.MODE_PRIVATE);
+                    outputStream.write(string.getBytes());
+                    outputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
